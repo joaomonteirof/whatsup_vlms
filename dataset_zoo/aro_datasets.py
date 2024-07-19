@@ -63,7 +63,9 @@ class VG_Relation(Dataset):
         # Each test case has a correct and incorrect caption.
         true_caption = test_case["true_caption"]
         false_caption = test_case["false_caption"]
-        item = edict({"image_options": [image], "caption_options": [false_caption, true_caption]})
+        # item = edict({"image_options": [image], "caption_options": [false_caption, true_caption]})
+        # Changed to match other datasets so that the first caption is always the right one.
+        item = edict({"image_options": [image], "caption_options": [true_caption, false_caption]})
         return item
     
     def download(self):
@@ -154,7 +156,9 @@ class VG_Attribution(Dataset):
         # Each test case has a correct and incorrect caption.
         true_caption = test_case["true_caption"]
         false_caption = test_case["false_caption"]
-        item = edict({"image_options": [image], "caption_options": [false_caption, true_caption]})
+        # item = edict({"image_options": [image], "caption_options": [false_caption, true_caption]})
+        # Changed to match other datasets so that the first caption is always the right one.
+        item = edict({"image_options": [image], "caption_options": [true_caption, false_caption]})
         return item
     
     def download(self):
