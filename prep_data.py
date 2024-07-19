@@ -2,6 +2,7 @@ import os
 import functools
 import argparse
 from collections import defaultdict
+from multiprocessing import Pool
 from dataset_zoo import get_dataset
 from misc import seed_all
 import datasets
@@ -56,6 +57,7 @@ def config():
         help="Will pushthe data to the huggingface hub using the provided path if not None. (Default: None)",
     )
     parser.add_argument("--output_dir", default="./data", type=str)
+    parser.add_argument("--n_processes", default=1, type=int)
     parser.add_argument("--seed", default=1, type=int)
     return parser.parse_args()
 
@@ -86,12 +88,11 @@ def main(args):
     print(filtered_dataset_list)
 
     # Run data preparations in parallel and save results to disk
-    _ = list(
-        map(
+    with Pool(processes=args.n_processes) as P:
+        P.map(
             functools.partial(get_and_prepare_hf_dataset, output_dir=args.output_dir),
             filtered_dataset_list,
         )
-    )
 
     # Load, join, and save/push the complete dataset
     join_save_and_push_datasets(
