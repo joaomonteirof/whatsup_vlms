@@ -215,7 +215,7 @@ class COCO_Order(Dataset):
                              shuffler.shuffle_within_trigrams, shuffler.shuffle_trigrams]
 
         self.root_dir = root_dir
-        if not os.path.exists(root_dir):
+        if not os.path.exists(os.path.join(root_dir, "val2014.zip")):
             print("Directory for COCO could not be found!")
             if download:
                 print("Downloading COCO now.")
