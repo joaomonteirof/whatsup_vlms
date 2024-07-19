@@ -45,7 +45,8 @@ def join_save_and_push_datasets(hf_hub_path, dataset_names, output_dir):
 
     if not os.path.exists(complete_data_path):
         complete_dataset.save_to_disk(complete_data_path)
-        complete_dataset.push_to_hub(args.hf_hub_path)
+
+    complete_dataset.push_to_hub(hf_hub_path)
 
 
 def config():
@@ -87,12 +88,15 @@ def main(args):
 
     print(filtered_dataset_list)
 
-    # Run data preparations in parallel and save results to disk
-    with Pool(processes=args.n_processes) as P:
-        P.map(
-            functools.partial(get_and_prepare_hf_dataset, output_dir=args.output_dir),
-            filtered_dataset_list,
-        )
+    if len(filtered_dataset_list) > 0:
+        # Run data preparations in parallel and save results to disk
+        with Pool(processes=args.n_processes) as P:
+            P.map(
+                functools.partial(
+                    get_and_prepare_hf_dataset, output_dir=args.output_dir
+                ),
+                filtered_dataset_list,
+            )
 
     # Load, join, and save/push the complete dataset
     join_save_and_push_datasets(
