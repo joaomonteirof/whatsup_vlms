@@ -40,7 +40,7 @@ def join_save_and_push_datasets(hf_hub_path, dataset_names, output_dir):
         hf_dataset = datasets.load_from_disk(data_path)
         data_splits[dataset_name] = hf_dataset
 
-    complete_dataset = datasets.Dataset.from_dict(data_splits)
+    complete_dataset = datasets.DatasetDict(data_splits)
     complete_data_path = os.path.join(output_dir, "hf_full_dataset")
 
     if not os.path.exists(complete_data_path):
